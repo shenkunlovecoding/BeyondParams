@@ -86,8 +86,8 @@ home:
 favicon: /favicon.png
 
 banner:
-  enable: false
-  url:
+  enable: true
+  url: /image.png
   position: center
   onAllPages: true
 
