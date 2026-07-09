@@ -1,0 +1,87 @@
+<% 
+    function build_tags_string(tags) {
+        let str = "";
+        for(let tag of tags.data) {
+            str += "#" + tag.name + " ";
+        }
+        return str.trim();
+    }
+
+    function build_names_string(items) {
+        return items && items.data ? items.data.map(item => item.name).join("|") : "";
+    }
+
+    let countByYear = {};
+    page.posts.each(function(post, i) {
+        let year = post.date.year();
+        countByYear[year] = countByYear[year] ? countByYear[year] + 1 : 1;
+    })
+
+    function getCountText(year) {
+        let count = countByYear[year];
+        if (count == 1)
+            return "1 " + __('article_count');
+        else
+            return count + " " + __('article_count_plural');
+    }
+
+    let allCategories = site.categories.sort('name').data;
+    let allTags = site.tags.sort('name').data;
+%> 
+
+<div class="archive-main-card">
+    <div class="archive-top">
+      <div class="main-title-bar">
+        <div class="main-title-dot"></div>
+        <h1 class="article-title"><%= __('archive_a') %></h1>
+      </div>    
+      <div class="archive-filters">
+        <div class="archive-filter-group">
+          <div class="archive-filter-label"><%= __('category') %></div>
+          <button class="archive-filter is-active" type="button" data-filter-type="all" data-filter-value=""><%= __('all') || 'All' %></button>
+          <% allCategories.forEach(function(category) { %>
+            <button class="archive-filter" type="button" data-filter-type="category" data-filter-value="<%= category.name %>"><%= category.name %></button>
+          <% }) %>
+        </div>
+        <div class="archive-filter-group">
+          <div class="archive-filter-label"><%= __('tag') %></div>
+          <% allTags.forEach(function(tag) { %>
+            <button class="archive-filter" type="button" data-filter-type="tag" data-filter-value="<%= tag.name %>">#<%= tag.name %></button>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+    <% let currYear = -1; %>
+    <% page.posts.each(function(post, i) { %>
+      <% let year = post.date.year(); %>
+      <% if (year != currYear) { %>
+        <% currYear = year; %>
+        <div class="year-line">
+            <div class="year-num"><%- year %></div>
+            <div class="dot-wrapper">
+                <div class="dot"></div>
+            </div>
+            <div class="article-count"><%- getCountText(year) %></div>
+        </div>
+      <% } %>
+      <a class="archive-article-link" href="<%- url_for(post.path) %>" title="<%- post.title %>" data-year="<%= year %>" data-categories="<%= build_names_string(post.categories) %>" data-tags="<%= build_names_string(post.tags) %>">
+        <div class="date"><%- post.date.format("MM[-]DD") %></div>
+        <div class="line">
+            <div class="dot"></div>
+        </div>
+        <div class="title">
+            <div class="title-inner">
+                <% if (post.title) { %>
+                    <%- post.title %>
+                <% } else { %>
+                    <%= __('untitled') %>
+                <% } %>
+            </div>
+        </div>
+        <div class="tags">
+            <%- build_tags_string(post.tags) %>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+<script src="<%- url_for('/js/archive-filter.js') %>"></script>

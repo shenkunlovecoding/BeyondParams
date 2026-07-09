@@ -1,0 +1,19 @@
+<% page.posts.each(function(post){ %>
+  <%- partial('_partial/article', {post: post, index: true}) %>
+<% }) %>
+<% if (page.total > 1){ %>
+  <nav id="page-nav">
+    <a id="prev-btn" class="page-nav-btn <% if (page.current == 1) { %>disabled<% } %>" href="<%- page.prev_link == "" ? url_for("/") : url_for(page.prev_link) %>">
+      <i class="fa-solid fa-angle-left"></i>
+    </a>
+    <div id="num-bar">
+      <%- paginator({
+        escape: false,
+        prev_next: false
+      }) %>  
+    </div>
+    <a id="next-btn" class="page-nav-btn <% if (page.current == page.total) { %>disabled<% } %>" href="<%- url_for(page.next_link) %>">
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+  </nav>
+<% } %>
