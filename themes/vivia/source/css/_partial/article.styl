@@ -1,6 +1,18 @@
 .article
   margin-bottom: block-margin
 
+.spoiler
+  color: transparent
+  font-size: 0.82em
+  background: currentColor
+  border-radius: 3px
+  padding: 0 4px
+  opacity: 0.85
+  transition: color 0.2s ease, background 0.2s ease
+  &:hover
+    color: inherit
+    background: rgba(127, 127, 127, 0.25)
+
 .article-inner
   @extend $card
   overflow: hidden
@@ -15,6 +27,8 @@
   background: var(--card-background)
   transition: background trans-style
   width: 100%
+  flex: 1 1 auto
+  min-width: 0
   margin-right: -16px
   padding-bottom: 16px
 
@@ -25,6 +39,7 @@
 .article-toc
   width: 220px
   flex: 0 0 220px
+  align-self: flex-start
   padding: 32px 24px 24px 8px
   background: var(--card-background)
   border-left: 1px solid var(--neut-L10)
